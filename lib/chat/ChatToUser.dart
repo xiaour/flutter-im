@@ -237,7 +237,7 @@ class ChatToUserState extends State<ChatToUser>{
   Widget _buildRow(MessageModel messageModel) {
     //这个文本框长度并不能很好地自适应英文，还需要后期进行计算调整
     bool _isChoiceUser = widget.toUser!=messageModel.fromUserName;
-    double bubbleWidth = messageModel.msg.length*25.0>250.0?250:messageModel.msg.length*30.0;
+    double bubbleWidth = messageModel.msg.length*25.0>260.0?265:messageModel.msg.length*30.0;
     double bubbleHeight =50.0;
     if(messageModel.msg.length>20 && messageModel.msg.length<30) {
        bubbleHeight = 60.0 * 1.4;

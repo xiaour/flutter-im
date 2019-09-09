@@ -138,6 +138,13 @@ class ChatListState extends State<ChatList> {
       connectionFlag = false;
     });
 
+    Fluttertoast.showToast(
+      msg: "已刷新设备列表",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIos: 1,
+    );
+
   }
 
   //监听事件
@@ -145,6 +152,11 @@ class ChatListState extends State<ChatList> {
     eventBus.on<SendChatEvent>().listen((event){
       socketChannel.sink.add(event.messageModel.toJsonString());
     });
+  }
+
+  Future<Null> _refresh() async {
+    _connectServerAndReceive();
+    return;
   }
 
 
@@ -155,9 +167,13 @@ class ChatListState extends State<ChatList> {
        debugShowCheckedModeBanner: false,
        home: new Scaffold(
            body: new Center(
-             child: new Text('未连接到服务器\n点击右上角设置按钮进行配置！',
-                 textAlign:TextAlign.center,
-                 style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0)),// 设置整体大小),
+             child:RefreshIndicator(
+               onRefresh: _refresh,
+               backgroundColor: Colors.blue,
+               child:  new Text('未连接到服务器\n点击右上角设置按钮进行配置！\n如果已经设置请下拉刷新。',
+                   textAlign:TextAlign.center,
+                   style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0)),
+             ),// 设置整体大小),
            ),
        ),
      );
@@ -165,16 +181,20 @@ class ChatListState extends State<ChatList> {
 
   Widget _buildSuggestions(UserModel model) {
     if(model.count>0){
-      return new ListView.separated(
-          itemCount:model.count,
-          padding: const EdgeInsets.all(15.0),
-          // 注意，在小屏幕上，分割线看起来可能比较吃力。
-          itemBuilder: (context, i) {
-            // 在每一列之前，添加一个1像素高的分隔线widget
-            //if (i.isOdd) return new Divider();
-            return _buildRow(model.userList[i]);
-          },
-        separatorBuilder: (BuildContext context, int index) => new Divider(),
+      return new RefreshIndicator(
+          onRefresh: _refresh,
+          //backgroundColor: Colors.blue,
+          child: new ListView.separated(
+            itemCount:model.userList.length,
+            padding: const EdgeInsets.all(15.0),
+            // 注意，在小屏幕上，分割线看起来可能比较吃力。
+            itemBuilder: (context, i) {
+              // 在每一列之前，添加一个1像素高的分隔线widget
+              //if (i.isOdd) return new Divider();
+              return _buildRow(model.userList[i]);
+            },
+            separatorBuilder: (BuildContext context, int index) => new Divider(),
+          )
       );
     }else{
       return new MaterialApp(
@@ -190,12 +210,6 @@ class ChatListState extends State<ChatList> {
                 icon: Icon(Icons.refresh),
                 onPressed: () {
                   this._connectServerAndReceive();
-                  Fluttertoast.showToast(
-                    msg: "已经刷新",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIos: 1,
-                  );
                 }),
           ]),alignment: Alignment.center,margin: EdgeInsets.only(top:200.0),
           ),),
