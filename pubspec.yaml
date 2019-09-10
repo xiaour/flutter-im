@@ -31,6 +31,8 @@ dependencies:
   flutter_bubble: ^0.0.1
   json_serializable: ^3.2.2
   event_bus: ^1.1.0
+  device_info: ^0.4.0+2
+  url_launcher: ^5.1.2
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -12,11 +12,8 @@ class SettingPage extends StatefulWidget {
 class SettingPageState extends State<SettingPage> {
 
   final String WS_DOMAIN = "msg_ws_url_domain";
-  final String WS_PORT = "msg_ws_url_port";
 
   TextEditingController domainController = TextEditingController();
-
-  TextEditingController portController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,42 +22,42 @@ class SettingPageState extends State<SettingPage> {
       domainController.text = domain;
     });
 
-    Future<String> port = _getConnect(WS_PORT);
-    port.then((String port) {
-      portController.text = port;
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text('连接设置'),
       ),
       body: Column(
         children: <Widget>[
-          TextField(
+          new Text(''),
+          new TextField(
+            textInputAction:TextInputAction.done,
             controller: domainController,
-            keyboardType: TextInputType.text,
-            textInputAction:TextInputAction.next,
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(10.0),
-              icon: Icon(Icons.filter_drama),
-              labelText: '服务器连接地址',
-              helperText: '请输入域名或IP地址',
+            decoration:InputDecoration(
+              contentPadding: EdgeInsets.all(8.0),
+              hintText: '请输入域名或IP地址',
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+                borderRadius: BorderRadius.all(Radius.circular(6)),
+              ),
+              fillColor: Colors.black12, filled: true,
 
             ),
-            autofocus: false,
-          ),
-          TextField(
-              controller: portController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
-                icon: Icon(Icons.language),
-                labelText: '服务器端口',
-              )),
-          RaisedButton(
+
+          )
+          ,RaisedButton(
+            splashColor:Colors.green,
             onPressed: _saveConnect,
             child: Text('保存连接'),
-          ),
+          )
+          ,new Divider()
+          ,new Text('提示：服务器连接地址需要配置正确的WebSocket链接URL，如果不清楚如何配置，请打开此地址！',
+              textAlign:TextAlign.left,
+              style: TextStyle(color: Colors.black26,fontSize: 14.0))
+          ,new IconButton(
+              icon: Icon(Icons.help_outline),
+              onPressed: () {
+                this.openHelp();
+              }),
         ],
       ),
     );
@@ -79,14 +76,9 @@ class SettingPageState extends State<SettingPage> {
           builder: (context) => AlertDialog(
             title: Text('服务地址填写不正确！'),
           ));
-    } else if (portController.text.length == 0) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('服务端口填写不正确'),
-          ));
-    } else {
-      this._saveWsConnect(domainController.text,portController.text);
+    }
+
+      this._saveWsConnect(domainController.text);
 
       Fluttertoast.showToast(
           msg: "服务器地址连接保存成功！",
@@ -94,17 +86,20 @@ class SettingPageState extends State<SettingPage> {
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
       );
-      portController.clear();
       domainController.clear();
       Navigator.pop(context,"EVENT_SUCCESS");
-    }
   }
 
   //保存WebService连接串
-  _saveWsConnect(String domain,String port) async{
+  void _saveWsConnect(String domain) async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(WS_DOMAIN, domain);
-    sharedPreferences.setString(WS_PORT, port);
+  }
+
+  void openHelp() async{
+    // url
+    const url = "https://github.com/xiaour/flutter-im/blob/master/README.md";
+    await launch(url);
   }
 
 }

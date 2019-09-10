@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,6 +11,8 @@ import 'package:xiaour_app/model/UserModel.dart';
 import 'package:xiaour_app/setting/SettingPage.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:badges/badges.dart';
+import 'package:device_info/device_info.dart';
+
 
 import 'dart:convert';
 
@@ -18,7 +22,6 @@ class ChatListState extends State<ChatList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _saved = new Map<String,int>();
   final String WS_DOMAIN = "msg_ws_url_domain";
-  final String WS_PORT = "msg_ws_url_port";
   final String WS_MSG = "msg_ws_";
   bool connectionFlag = false;
   UserModel userModel;
@@ -82,12 +85,16 @@ class ChatListState extends State<ChatList> {
   //连接或接收消息
   void _connectServerAndReceive() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.get(WS_DOMAIN) == null || sharedPreferences.get(WS_PORT) ==null){
+    if(sharedPreferences.get(WS_DOMAIN) == null){
       setState(() {
         connectionFlag = false;
       });
     }
-    String wsUrl = "ws://"+sharedPreferences.get(WS_DOMAIN)+":"+sharedPreferences.get(WS_PORT)+"/echo";
+
+    //getDeviceInfo();
+
+    String wsUrl = sharedPreferences.get(WS_DOMAIN)+"/echo";
+
     final channel = new IOWebSocketChannel.connect(wsUrl);
     channel.stream.listen((message) {
       _listen(channel);
@@ -158,8 +165,65 @@ class ChatListState extends State<ChatList> {
     _connectServerAndReceive();
     return;
   }
+  //获取设备类型
+/*  void getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
+    if(Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      print(_readAndroidBuildData(androidInfo).toString());
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      print(_readIosDeviceInfo(iosInfo).toString());
+    }
+  }*/
 
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'identifierForVendor': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname:': data.utsname.sysname,
+      'utsname.nodename:': data.utsname.nodename,
+      'utsname.release:': data.utsname.release,
+      'utsname.version:': data.utsname.version,
+      'utsname.machine:': data.utsname.machine,
+    };
+  }
 
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'androidId': build.androidId
+    };
+  }
 
   Widget _buildNotConnect(){
      return new MaterialApp(
@@ -222,6 +286,9 @@ class ChatListState extends State<ChatList> {
     final alreadySaved = _saved.containsKey(userName);
     final count = alreadySaved==true?_saved[userName]:0;
     return new ListTile(
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage("https://static.suiyueyule.com/user_icon.png"),
+      ),
       title: new Text(
         userName,
         style: _biggerFont,

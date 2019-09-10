@@ -117,7 +117,7 @@ class ChatToUserState extends State<ChatToUser>{
                   child: Theme.of(context).platform == TargetPlatform.iOS
                       ? null
                       : new IconButton(
-                    icon: new Icon(Icons.message),
+                    icon: new Icon(Icons.chat),
                     onPressed: _isWriting
                         ? () => _submitMsg(_textController.text)
                         : null,
@@ -159,6 +159,9 @@ class ChatToUserState extends State<ChatToUser>{
         .getInstance();
     sharedPreferences.remove(WS_MSG + widget.toUser);
     Navigator.of(context).pop();
+    setState(() {
+      _messageList =new List();
+    });
   }
 
   void _submitMsg(String text) async {
