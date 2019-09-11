@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xiaour_app/ChatListState.dart';
+import 'package:xiaour_app/constants/System.dart';
 
 
 void main() => runApp(new MyApp());
@@ -9,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: '妙传',
+      title: APP_NAME,
       theme: new ThemeData(
         primaryColor: Colors.white,
       ),

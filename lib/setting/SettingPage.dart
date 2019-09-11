@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:xiaour_app/constants/Tips.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -74,14 +75,14 @@ class SettingPageState extends State<SettingPage> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('服务地址填写不正确！'),
+            title: Text(WS_SERVER_IS_ERROR),
           ));
     }
 
       this._saveWsConnect(domainController.text);
 
       Fluttertoast.showToast(
-          msg: "服务器地址连接保存成功！",
+          msg: SAVE_SERVER_SUCCESS,
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,

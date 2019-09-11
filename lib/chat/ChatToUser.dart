@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bubble/bubble_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:xiaour_app/constants/System.dart';
+import 'package:xiaour_app/constants/Tips.dart';
 import 'package:xiaour_app/event/ChatEvent.dart';
 import 'package:xiaour_app/model/MessageModel.dart';
 
@@ -19,7 +21,7 @@ class ChatToUser extends StatefulWidget {
 }
 
 class ChatToUserState extends State<ChatToUser>{
-  final String WS_MSG = "msg_ws_";
+
   //Tab页的控制器，可以用来定义Tab标签和内容页的坐标
   final TextEditingController _textController = new TextEditingController();
   //List<String> _messages = <String>[];
@@ -135,7 +137,7 @@ class ChatToUserState extends State<ChatToUser>{
         context: context,
         builder: (context) =>
             AlertDialog(
-              title: Text('确定要清除历史消息吗？'),
+              title: Text(IS_CLEAR_CACHE),
               actions: <Widget>[
                 FlatButton(
                   child: Text('暂不'),
@@ -266,7 +268,7 @@ class ChatToUserState extends State<ChatToUser>{
       onLongPress: (){
           Clipboard.setData(ClipboardData(text:messageModel.msg));
           Fluttertoast.showToast(
-            msg: "内容已复制到剪切板！",
+            msg: CONTENT_COPY,
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIos: 1,

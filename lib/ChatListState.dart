@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xiaour_app/chat/ChatToUser.dart';
+import 'package:xiaour_app/constants/System.dart';
 import 'package:xiaour_app/main.dart';
 import 'package:xiaour_app/model/MessageModel.dart';
 import 'package:xiaour_app/model/UserModel.dart';
@@ -16,13 +17,13 @@ import 'package:device_info/device_info.dart';
 
 import 'dart:convert';
 
+import 'constants/Tips.dart';
 import 'event/ChatEvent.dart';
 
 class ChatListState extends State<ChatList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _saved = new Map<String,int>();
-  final String WS_DOMAIN = "msg_ws_url_domain";
-  final String WS_MSG = "msg_ws_";
+
   bool connectionFlag = false;
   UserModel userModel;
 
@@ -38,7 +39,7 @@ class ChatListState extends State<ChatList> {
     if(this.connectionFlag){
       return new Scaffold (
         appBar: new AppBar(
-          title: new Text('妙传'),
+          title: new Text(APP_NAME),
           actions: <Widget>[
             // 非隐藏的菜单
             new IconButton(
@@ -60,7 +61,7 @@ class ChatListState extends State<ChatList> {
     }else{
       return new Scaffold (
         appBar: new AppBar(
-          title: new Text('妙传'),
+          title: new Text(APP_NAME),
           actions: <Widget>[
             // 非隐藏的菜单
             new IconButton(
@@ -146,7 +147,7 @@ class ChatListState extends State<ChatList> {
     });
 
     Fluttertoast.showToast(
-      msg: "已刷新设备列表",
+      msg: DEVICE_REFRESH,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       timeInSecForIos: 1,
@@ -227,14 +228,14 @@ class ChatListState extends State<ChatList> {
 
   Widget _buildNotConnect(){
      return new MaterialApp(
-       title: '妙传',
+       title: APP_NAME,
        debugShowCheckedModeBanner: false,
        home: new Scaffold(
            body: new Center(
              child:RefreshIndicator(
                onRefresh: _refresh,
                backgroundColor: Colors.blue,
-               child:  new Text('未连接到服务器\n点击右上角设置按钮进行配置！\n如果已经设置请下拉刷新。',
+               child:  new Text(WS_SERVER_NOT_CONNECT,
                    textAlign:TextAlign.center,
                    style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0)),
              ),// 设置整体大小),
@@ -262,12 +263,12 @@ class ChatListState extends State<ChatList> {
       );
     }else{
       return new MaterialApp(
-        title: '妙传',
+        title: APP_NAME,
         debugShowCheckedModeBanner: false,
         home: new Scaffold(
           body: Center(
           child: Container(child: new Column(children: <Widget>[
-            new Text('未发现设备，点击按钮刷新！',
+            new Text(DEVICE_NOT_FOUND,
                 textAlign:TextAlign.center,
                 style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0)) ,
             new IconButton(
