@@ -26,6 +26,7 @@ class ChatListState extends State<ChatList> {
 
   bool connectionFlag = false;
   UserModel userModel;
+  String device ;
 
   @override
   void initState() {
@@ -92,10 +93,7 @@ class ChatListState extends State<ChatList> {
       });
     }
 
-    //getDeviceInfo();
-
     String wsUrl = sharedPreferences.get(WS_DOMAIN)+"/echo";
-
     final channel = new IOWebSocketChannel.connect(wsUrl);
     channel.stream.listen((message) {
       _listen(channel);
@@ -128,7 +126,7 @@ class ChatListState extends State<ChatList> {
           print("没有消息！");
           return;
         }
-
+        print(messageModel.toJsonString());
         list.forEach((f){
           Map<String, dynamic> jsonMap = jsonDecode(f);
           msgList.add( MessageModel.fromJson(jsonMap));
@@ -158,6 +156,7 @@ class ChatListState extends State<ChatList> {
   //监听事件
   void _listen(IOWebSocketChannel socketChannel){
     eventBus.on<SendChatEvent>().listen((event){
+      print(event.messageModel.toJsonString());
       socketChannel.sink.add(event.messageModel.toJsonString());
     });
   }
@@ -167,81 +166,34 @@ class ChatListState extends State<ChatList> {
     return;
   }
   //获取设备类型
-/*  void getDeviceInfo() async {
-    DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
+ String getDeviceInfo() {
     if(Platform.isAndroid) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      print(_readAndroidBuildData(androidInfo).toString());
+      return  "Android";
     } else if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      print(_readIosDeviceInfo(iosInfo).toString());
+      return  "iOS";
     }
-  }*/
-
-  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
-    return <String, dynamic>{
-      'name': data.name,
-      'systemName': data.systemName,
-      'systemVersion': data.systemVersion,
-      'model': data.model,
-      'localizedModel': data.localizedModel,
-      'identifierForVendor': data.identifierForVendor,
-      'isPhysicalDevice': data.isPhysicalDevice,
-      'utsname.sysname:': data.utsname.sysname,
-      'utsname.nodename:': data.utsname.nodename,
-      'utsname.release:': data.utsname.release,
-      'utsname.version:': data.utsname.version,
-      'utsname.machine:': data.utsname.machine,
-    };
   }
 
-  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
-    return <String, dynamic>{
-      'version.securityPatch': build.version.securityPatch,
-      'version.sdkInt': build.version.sdkInt,
-      'version.release': build.version.release,
-      'version.previewSdkInt': build.version.previewSdkInt,
-      'version.incremental': build.version.incremental,
-      'version.codename': build.version.codename,
-      'version.baseOS': build.version.baseOS,
-      'board': build.board,
-      'bootloader': build.bootloader,
-      'brand': build.brand,
-      'device': build.device,
-      'display': build.display,
-      'fingerprint': build.fingerprint,
-      'hardware': build.hardware,
-      'host': build.host,
-      'id': build.id,
-      'manufacturer': build.manufacturer,
-      'model': build.model,
-      'product': build.product,
-      'supported32BitAbis': build.supported32BitAbis,
-      'supported64BitAbis': build.supported64BitAbis,
-      'supportedAbis': build.supportedAbis,
-      'tags': build.tags,
-      'type': build.type,
-      'isPhysicalDevice': build.isPhysicalDevice,
-      'androidId': build.androidId
-    };
-  }
 
   Widget _buildNotConnect(){
-     return new MaterialApp(
-       title: APP_NAME,
-       debugShowCheckedModeBanner: false,
-       home: new Scaffold(
-           body: new Center(
-             child:RefreshIndicator(
-               onRefresh: _refresh,
-               backgroundColor: Colors.blue,
-               child:  new Text(WS_SERVER_NOT_CONNECT,
-                   textAlign:TextAlign.center,
-                   style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0)),
-             ),// 设置整体大小),
-           ),
-       ),
-     );
+
+    return new MaterialApp(
+      title: APP_NAME,
+      debugShowCheckedModeBanner: false,
+      home: new RefreshIndicator(
+          onRefresh: _refresh,
+          child: Container(child: new Column(children: <Widget>[
+            new Text(WS_SERVER_NOT_CONNECT,
+                textAlign:TextAlign.center,
+                style: TextStyle(color: Colors.orangeAccent,fontSize: 18.0)) ,
+            new IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  this._connectServerAndReceive();
+                }),
+          ]),alignment: Alignment.center,margin: EdgeInsets.only(top:200.0),
+          ),),
+      );
    }
 
   Widget _buildSuggestions(UserModel model) {

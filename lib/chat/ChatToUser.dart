@@ -172,7 +172,13 @@ class ChatToUserState extends State<ChatToUser>{
     }
     _textController.clear();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Map<String,dynamic> map = { "fromUserName":widget.currentUser,"fromSessionId":"0","msg":text,"to":widget.toUser,"type":2};
+    Map<String,dynamic> map = {
+      "fromUserName":widget.currentUser,
+      "fromSessionId":"0",
+      "msgId": new DateTime.now().millisecondsSinceEpoch.toString(),
+      "msg":text,
+      "to":widget.toUser,
+      "type":2};
     MessageModel messageModel = MessageModel.fromJson(map);
     List<String> list = sharedPreferences.getStringList(WS_MSG+widget.toUser);
     if(list == null){
