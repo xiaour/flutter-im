@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bubble/bubble_widget.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xiaour_app/constants/System.dart';
 import 'package:xiaour_app/constants/Tips.dart';
@@ -73,8 +74,10 @@ class ChatToUserState extends State<ChatToUser>{
               child: _buildComposer(),
               decoration: new BoxDecoration(color: Color.fromRGBO(241, 243, 244, 0.9)),
             ),
+
           ]);
         }),
+
 
       resizeToAvoidBottomPadding:true,
     );
@@ -111,24 +114,50 @@ class ChatToUserState extends State<ChatToUser>{
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
                   ),
-
                 ),
               ),
-              new Container(
-                  //margin: new EdgeInsets.symmetric(horizontal: 3.0),
-                  child: Theme.of(context).platform == TargetPlatform.iOS
-                      ? null
-                      : new IconButton(
-                    icon: new Icon(Icons.chat),
-                    onPressed: _isWriting
-                        ? () => _submitMsg(_textController.text)
-                        : null,
-                  )
+              new IconButton(
+                  icon: new Icon(Icons.add_circle_outline),
+                  onPressed: openAction,
+                  color:Colors.black26,
               ),
+
             ],
           ),
 
       ),
+    );
+  }
+
+  Future<Null> openAction(){
+    return showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context){
+          return new Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              new ListTile(
+                leading: new Icon(Icons.photo_camera),
+                title: new Text("相机拍摄"),
+                onTap: () async {
+                  //var image = await ImagePicker.pickImage(source: ImageSource.camera);
+                  //Navigator.pop(context);
+                },
+              ),
+              new ListTile(
+                leading: new Icon(Icons.photo_library),
+                title: new Text("照片库"),
+                onTap: () async {
+                  //var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                  //var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+                  //Navigator.pop(context);
+                },
+              ),
+
+            ],
+          );
+
+        }
     );
   }
 

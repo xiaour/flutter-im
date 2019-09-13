@@ -13,6 +13,8 @@ class SettingPage extends StatefulWidget {
 class SettingPageState extends State<SettingPage> {
 
   final String WS_DOMAIN = "msg_ws_url_domain";
+  var size = FontWeight.w500; // 定义一个字体类型
+  var _isExpanded = false;
 
   TextEditingController domainController = TextEditingController();
 
@@ -24,43 +26,86 @@ class SettingPageState extends State<SettingPage> {
     });
 
     return Scaffold(
+
       appBar: AppBar(
-        title: Text('连接设置'),
+        title: Text('设置'),
       ),
-      body: Column(
-        children: <Widget>[
-          new Text(''),
-          new TextField(
-            textInputAction:TextInputAction.done,
-            controller: domainController,
-            decoration:InputDecoration(
-              contentPadding: EdgeInsets.all(8.0),
-              hintText: '请输入域名或IP地址',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-                borderRadius: BorderRadius.all(Radius.circular(6)),
-              ),
-              fillColor: Colors.black12, filled: true,
-
+      body: Container(
+          decoration: BoxDecoration(color: Colors.white),
+          child:Column(
+          children: <Widget>[
+            new Text(""),
+            ListTile(
+              title: Text('设备名称：iPhone',style: TextStyle(fontWeight: size),),
+              leading: Icon(Icons.account_circle,color: Colors.deepOrange),
             ),
+            // 分割线
+            new Divider(),
+            ListTile(
+              title: Text('在线帮助文档',style: TextStyle(fontWeight: size),),
+              subtitle: Text("不清楚如何配置？点我试试！"),
+              leading: Icon(Icons.assignment,color: Colors.teal),
+              onTap: this.openHelp,
+            ),
+            new Divider(),
+            SingleChildScrollView(
 
-          )
-          ,RaisedButton(
-            splashColor:Colors.green,
-            onPressed: _saveConnect,
-            child: Text('保存连接'),
-          )
-          ,new Divider()
-          ,new Text('提示：服务器连接地址需要配置正确的WebSocket链接URL，如果不清楚如何配置，请打开此地址！',
-              textAlign:TextAlign.left,
-              style: TextStyle(color: Colors.black26,fontSize: 14.0))
-          ,new IconButton(
-              icon: Icon(Icons.help_outline),
-              onPressed: () {
-                this.openHelp();
-              }),
-        ],
+                child:ExpansionPanelList(
+
+                  children : <ExpansionPanel>[
+
+                    ExpansionPanel(
+
+                      headerBuilder:(context, isExpanded){
+
+                        return ListTile(
+                          title: Text('服务器设置', style: TextStyle(fontWeight: size),),
+                          leading: Icon(Icons.language,color: Colors.lightBlue),
+                        );
+                      },
+                      body: Padding(
+                        padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+                        child: ListBody(
+                          children: <Widget>[
+                            new TextField(
+                              textInputAction:TextInputAction.done,
+                              controller: domainController,
+                              decoration:InputDecoration(
+                                contentPadding: EdgeInsets.all(8.0),
+                                hintText: '请输入域名或IP地址',
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.transparent),
+                                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                                ),
+                                //fillColor: Colors.lightBlue, filled: true,
+                              ),
+
+                            )
+                            ,Text("")
+                            ,RaisedButton(
+                              splashColor:Colors.green,
+                              onPressed: _saveConnect,
+                              child: Text('保存连接'),
+                            ),
+                          ],
+                        ),
+                      ),
+                      isExpanded: _isExpanded,
+                      canTapOnHeader: true,
+                    ),
+
+                  ],
+                  expansionCallback:(panelIndex, isExpanded){
+                    setState(() {
+                      _isExpanded = !isExpanded;
+                    });
+                  },
+                  animationDuration : kThemeAnimationDuration,
+                ),
+            )
+          ],
       ),
+      )
     );
   }
 

@@ -13,10 +13,7 @@ import 'package:xiaour_app/setting/SettingPage.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:badges/badges.dart';
 import 'package:device_info/device_info.dart';
-
-
 import 'dart:convert';
-
 import 'constants/Tips.dart';
 import 'event/ChatEvent.dart';
 
@@ -31,6 +28,7 @@ class ChatListState extends State<ChatList> {
   @override
   void initState() {
     super.initState();
+    _getDeviceInfo();
     _connectServerAndReceive();
   }
 
@@ -84,6 +82,23 @@ class ChatListState extends State<ChatList> {
     }
 
   }
+  //获取设备信息
+  void _getDeviceInfo() async{
+    String tempDevice = "UNKONW";
+    DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
+    if(Platform.isIOS){
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      tempDevice = iosInfo.model+"_"+iosInfo.name;
+    }else if(Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      tempDevice = androidInfo.brand + "_" + androidInfo.id;
+    }
+    setState(() {
+        device = tempDevice;
+    });
+  }
+
+
   //连接或接收消息
   void _connectServerAndReceive() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -91,11 +106,16 @@ class ChatListState extends State<ChatList> {
       setState(() {
         connectionFlag = false;
       });
+      return;
     }
 
     String wsUrl = sharedPreferences.get(WS_DOMAIN)+"/echo";
-    final channel = new IOWebSocketChannel.connect(wsUrl);
+
+    Map<String,dynamic> myHeaders = {"device":device};
+
+    final channel = new IOWebSocketChannel.connect(wsUrl,headers: myHeaders);
     channel.stream.listen((message) {
+      print(message);
       _listen(channel);
       Map<String, dynamic> jsonMap = jsonDecode(message);
       //是否是登录的返回
@@ -140,10 +160,6 @@ class ChatListState extends State<ChatList> {
       }
     });
 
-    setState(() {
-      connectionFlag = false;
-    });
-
     Fluttertoast.showToast(
       msg: DEVICE_REFRESH,
       toastLength: Toast.LENGTH_SHORT,
@@ -164,14 +180,6 @@ class ChatListState extends State<ChatList> {
   Future<Null> _refresh() async {
     _connectServerAndReceive();
     return;
-  }
-  //获取设备类型
- String getDeviceInfo() {
-    if(Platform.isAndroid) {
-      return  "Android";
-    } else if (Platform.isIOS) {
-      return  "iOS";
-    }
   }
 
 
