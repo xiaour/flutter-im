@@ -12,7 +12,6 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-
   @override
   void initState() {
     super.initState();
@@ -22,7 +21,10 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       return Container(
-        child: Image(image: AssetImage('assets/images/splash.jpg'), fit: BoxFit.fitHeight,),
+        child: Image(
+          image: AssetImage('assets/images/splash.jpg'),
+          fit: BoxFit.fitHeight,
+        ),
       );
     });
   }

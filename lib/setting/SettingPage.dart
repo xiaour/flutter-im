@@ -11,7 +11,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class SettingPageState extends State<SettingPage> {
-
   final String WS_DOMAIN = "msg_ws_url_domain";
   var size = FontWeight.w500; // 定义一个字体类型
   var _isExpanded = false;
@@ -26,41 +25,36 @@ class SettingPageState extends State<SettingPage> {
     });
 
     return Scaffold(
-
-      appBar: AppBar(
-        title: Text('设置'),
-      ),
-      body: Container(
+        appBar: AppBar(
+          title: Text('设置'),
+        ),
+        body: Container(
           decoration: BoxDecoration(color: Colors.white),
-          child:Column(
-          children: <Widget>[
-            new Text(""),
-            ListTile(
-              title: Text('设备名称：iPhone',style: TextStyle(fontWeight: size),),
-              leading: Icon(Icons.account_circle,color: Colors.deepOrange),
-            ),
-            // 分割线
-            new Divider(),
-            ListTile(
-              title: Text('在线帮助文档',style: TextStyle(fontWeight: size),),
-              subtitle: Text("不清楚如何配置？点我试试！"),
-              leading: Icon(Icons.assignment,color: Colors.teal),
-              onTap: this.openHelp,
-            ),
-            new Divider(),
-            SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              new Text(""),
+              ListTile(
+                title: Text(
+                  '设备名称：iPhone',
+                  style: TextStyle(fontWeight: size),
+                ),
+                leading: Icon(Icons.account_circle, color: Colors.deepOrange),
+              ),
+              // 分割线
+              new Divider(),
 
-                child:ExpansionPanelList(
-
-                  children : <ExpansionPanel>[
-
+              SingleChildScrollView(
+                child: ExpansionPanelList(
+                  children: <ExpansionPanel>[
                     ExpansionPanel(
-
-                      headerBuilder:(context, isExpanded){
-
+                      headerBuilder: (context, isExpanded) {
                         return ListTile(
-                          title: Text('服务器设置', style: TextStyle(fontWeight: size),),
-                          leading: Icon(Icons.language,color: Colors.lightBlue),
+                          title: Text(
+                            '服务器设置',
+                            style: TextStyle(fontWeight: size),
+                          ),
+                          leading:
+                              Icon(Icons.language, color: Colors.lightBlue),
                         );
                       },
                       body: Padding(
@@ -68,22 +62,23 @@ class SettingPageState extends State<SettingPage> {
                         child: ListBody(
                           children: <Widget>[
                             new TextField(
-                              textInputAction:TextInputAction.done,
+                              textInputAction: TextInputAction.done,
                               controller: domainController,
-                              decoration:InputDecoration(
+                              decoration: InputDecoration(
                                 contentPadding: EdgeInsets.all(8.0),
                                 hintText: '请输入域名或IP地址',
                                 border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.transparent),
-                                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(6)),
                                 ),
                                 //fillColor: Colors.lightBlue, filled: true,
                               ),
-
-                            )
-                            ,Text("")
-                            ,RaisedButton(
-                              splashColor:Colors.green,
+                            ),
+                            Text(""),
+                            RaisedButton(
+                              splashColor: Colors.green,
                               onPressed: _saveConnect,
                               child: Text('保存连接'),
                             ),
@@ -93,20 +88,28 @@ class SettingPageState extends State<SettingPage> {
                       isExpanded: _isExpanded,
                       canTapOnHeader: true,
                     ),
-
                   ],
-                  expansionCallback:(panelIndex, isExpanded){
+                  expansionCallback: (panelIndex, isExpanded) {
                     setState(() {
                       _isExpanded = !isExpanded;
                     });
                   },
-                  animationDuration : kThemeAnimationDuration,
+                  animationDuration: kThemeAnimationDuration,
                 ),
-            )
-          ],
-      ),
-      )
-    );
+              ),
+              new Divider(),
+              ListTile(
+                title: Text(
+                  '在线帮助文档',
+                  style: TextStyle(fontWeight: size),
+                ),
+                subtitle: Text("不清楚如何配置？点我试试！"),
+                leading: Icon(Icons.assignment, color: Colors.teal),
+                onTap: this.openHelp,
+              ),
+            ],
+          ),
+        ));
   }
 
   Future<String> _getConnect(String key) async {
@@ -115,37 +118,35 @@ class SettingPageState extends State<SettingPage> {
   }
 
   void _saveConnect() {
-
     if (domainController.text.length == 0) {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text(WS_SERVER_IS_ERROR),
-          ));
+                title: Text(WS_SERVER_IS_ERROR),
+              ));
     }
 
-      this._saveWsConnect(domainController.text);
+    this._saveWsConnect(domainController.text);
 
-      Fluttertoast.showToast(
-          msg: SAVE_SERVER_SUCCESS,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-      );
-      domainController.clear();
-      Navigator.pop(context,"EVENT_SUCCESS");
+    Fluttertoast.showToast(
+      msg: SAVE_SERVER_SUCCESS,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+      timeInSecForIos: 1,
+    );
+    domainController.clear();
+    Navigator.pop(context, "EVENT_SUCCESS");
   }
 
   //保存WebService连接串
-  void _saveWsConnect(String domain) async{
+  void _saveWsConnect(String domain) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setString(WS_DOMAIN, domain);
   }
 
-  void openHelp() async{
+  void openHelp() async {
     // url
     const url = "https://github.com/xiaour/flutter-im/blob/master/README.md";
     await launch(url);
   }
-
 }

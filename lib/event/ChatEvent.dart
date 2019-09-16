@@ -6,7 +6,7 @@ EventBus eventBus = EventBus();
 
 class ChatListEvent {
   List<MessageModel> msgList;
-  ChatListEvent(List<MessageModel> msgList){
+  ChatListEvent(List<MessageModel> msgList) {
     this.msgList = msgList;
   }
 }
@@ -14,18 +14,17 @@ class ChatListEvent {
 //发送消息
 class SendChatEvent {
   MessageModel messageModel;
-  SendChatEvent(MessageModel model){
+  SendChatEvent(MessageModel model) {
     this.messageModel = model;
   }
 }
 
-
 //跳转事件
 class JumpEvent {
-  String toUser ;
+  String toUser;
   String currentUser;
 
-  JumpEvent( String currentUser,String toUser){
+  JumpEvent(String currentUser, String toUser) {
     this.toUser = toUser;
     this.currentUser = currentUser;
   }
