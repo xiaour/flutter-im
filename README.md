@@ -4,26 +4,14 @@
 
 ## 部署：
 #### 获取 webchat -> https://github.com/xiaour/webchat.git
-- 1.webchat 需要java环境支持，在打包后部署jar即可
-- 2.flutter-im 需要根据想要打包的客户端进行安装，flutter 安装步骤请参考官方文档。
-- 3.在环境配置完成后，选择相应设备进行安装客户端。打开客户端配置好webchat的连接地址，即可使用。
+- 1.webchat（妙传服务端） 需要java环境支持，在打包后部署jar即可
+- 2.flutter-im（妙传客户端） 需要根据想要打包的客户端进行安装，flutter 安装步骤请参考官方文档。
+- 3.在环境配置完成后，选择相应设备进行安装客户端。打开客户端配置好webchat的连接地址，如果不修改端口和项目名称webchat地址是"http://your.ip/8099/webchat"。
+- 4.flutter-im（妙传客户端） 在手机上安装后，需要在设置中输入"ws://your.ip/8099/webchat"，之后重新打开客户端或者点击首页刷新按钮，即可连接到服务器。
 
 ## 使用：
-- 1.浏览器打开部署的webchat地址，默认端口8080。
+- 1.浏览器打开部署的webchat（妙传服务端）地址，默认端口8099.
 ![image](https://oscimg.oschina.net/oscnet/6ea943d0a08edf9d0f6b7677ad2bbdcde33.jpg)
 - 2.在移动端设置中填写webchat的IP和端口，保存后刷新设备列表。这时，就可以跨设备使用我们的IM啦！
-![image](https://oscimg.oschina.net/oscnet/3dd0bb2e21cda20a175f0fc0ec656b73fd7.jpg)
+![image](https://oscimg.oschina.net/oscnet/188be67eaa95867c91d1596aa27a520469c.jpg)
 
-
-## Flutter Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
