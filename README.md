@@ -13,5 +13,5 @@
 - 1.浏览器打开部署的webchat（妙传服务端）地址，默认端口8099.
 ![image](https://oscimg.oschina.net/oscnet/6ea943d0a08edf9d0f6b7677ad2bbdcde33.jpg)
 - 2.在移动端设置中填写webchat的IP和端口，保存后刷新设备列表。这时，就可以跨设备使用我们的IM啦！
-![image](https://oscimg.oschina.net/oscnet/188be67eaa95867c91d1596aa27a520469c.jpg)
+![image](https://oscimg.oschina.net/oscnet/afed443ce11b8a756b01e0d20232c770838.jpg)
 
