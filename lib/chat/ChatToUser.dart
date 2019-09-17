@@ -138,7 +138,6 @@ class ChatToUserState extends State<ChatToUser> {
                 title: new Text("照片库"),
                 onTap: () async {
                   //var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-                  //var image = await ImagePicker.pickImage(source: ImageSource.gallery);
                   //Navigator.pop(context);
                 },
               ),
