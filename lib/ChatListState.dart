@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'constants/Tips.dart';
 import 'event/ChatEvent.dart';
 
+
 class ChatListState extends State<ChatList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _saved = new Map<String, int>();
@@ -48,7 +49,7 @@ class ChatListState extends State<ChatList> {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => new SettingPage()));
+                          builder: (context) => new SettingPage(deviceName:this.device)));
                 }),
           ],
         ),
@@ -62,12 +63,12 @@ class ChatListState extends State<ChatList> {
             // 非隐藏的菜单
             new IconButton(
                 icon: new Icon(Icons.settings),
-                tooltip: '连接设置',
+                tooltip: '设置',
                 onPressed: () {
                   Navigator.push(
                       context,
                       new MaterialPageRoute(
-                          builder: (context) => new SettingPage()));
+                          builder: (context) => new SettingPage(deviceName:this.device)));
                 }),
           ],
         ),

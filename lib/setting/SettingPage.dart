@@ -6,11 +6,17 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:xiaour_app/constants/Tips.dart';
 
 class SettingPage extends StatefulWidget {
+  String deviceName;
+
+  SettingPage({Key key, this.deviceName}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => SettingPageState();
+  State<StatefulWidget> createState() => SettingPageState(deviceName:deviceName);
 }
 
 class SettingPageState extends State<SettingPage> {
+  String deviceName;
+  SettingPageState({Key key, this.deviceName});
   final String WS_DOMAIN = "msg_ws_url_domain";
   var size = FontWeight.w500; // 定义一个字体类型
   var _isExpanded = false;
@@ -35,7 +41,7 @@ class SettingPageState extends State<SettingPage> {
               new Text(""),
               ListTile(
                 title: Text(
-                  '设备名称：iPhone',
+                  '设备名称：'+this.deviceName,
                   style: TextStyle(fontWeight: size),
                 ),
                 leading: Icon(Icons.account_circle, color: Colors.deepOrange),
@@ -137,6 +143,7 @@ class SettingPageState extends State<SettingPage> {
     domainController.clear();
     Navigator.pop(context, "EVENT_SUCCESS");
   }
+
 
   //保存WebService连接串
   void _saveWsConnect(String domain) async {

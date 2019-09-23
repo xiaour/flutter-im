@@ -41,5 +41,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>在发送照片时打开此功能</string>
+    <key>NSCameraUsageDescription</key>
+    <string>当您选择拍照时打开您的摄像头</string>
 </dict>
 </plist>

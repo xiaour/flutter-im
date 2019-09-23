@@ -1,4 +1,4 @@
-const String DEVICE_NOT_FOUND = "未发现设备，点击按钮刷新！";
+const String DEVICE_NOT_FOUND = "服务连接成功，但未发现设备";
 
 const String DEVICE_REFRESH = "已刷新设备列表";
 
