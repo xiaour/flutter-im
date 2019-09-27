@@ -6,8 +6,8 @@
 #### 获取 webchat -> https://github.com/xiaour/webchat.git
 - 1.webchat（妙传服务端） 需要java环境支持，在打包后部署jar即可
 - 2.flutter-im（妙传客户端） 需要根据想要打包的客户端进行安装，flutter 安装步骤请参考官方文档。
-- 3.在环境配置完成后，选择相应设备进行安装客户端。打开客户端配置好webchat的连接地址，如果不修改端口和项目名称webchat地址是"http://your.ip/8099/webchat"。
-- 4.flutter-im（妙传客户端） 在手机上安装后，需要在设置中输入"ws://your.ip/8099/webchat"，之后重新打开客户端或者点击首页刷新按钮，即可连接到服务器。
+- 3.在环境配置完成后，选择相应设备进行安装客户端。打开客户端配置好webchat的连接地址，如果不修改端口和项目名称webchat地址是"http://your.ip:8099/webchat"。
+- 4.flutter-im（妙传客户端） 在手机上安装后，需要在设置中输入"ws://your.ip:8099/webchat"，之后重新打开客户端或者点击首页刷新按钮，即可连接到服务器。
 
 ## 使用：
 - 1.浏览器打开部署的webchat（妙传服务端）地址，默认端口8099.
